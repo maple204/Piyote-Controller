@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# Coyote Controller — Raspberry Pi Installer
-# Usage: curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/coyote-controller/main/install.sh | bash
+# Piyote Controller — Raspberry Pi Installer
+# Usage: curl -sSL https://raw.githubusercontent.com/maple204/Piyote-Controller/main/install.sh | bash
 # ─────────────────────────────────────────────────────────────────────────────
 set -e
 
-# ── Config ────────────────────────────────────────────────────────────────────
-REPO="maple204/Piyote-Controller"   
+REPO="maple204/Piyote-Controller"
 APP_NAME="Piyote Controller"
-TMP_DEB="/tmp/piyote-controller.deb"
+INSTALL_DIR="/opt/piyote-controller"
+TMP_TAR="/tmp/piyote-controller.tar.gz"
 
-# ── Colours ───────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'
 CYAN='\033[0;36m'; BOLD='\033[1m'; NC='\033[0m'
 
@@ -21,104 +20,105 @@ error()   { echo -e "${RED}✗${NC} $1"; exit 1; }
 
 echo ""
 echo -e "${BOLD}╔══════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}║       Coyote Controller Installer        ║${NC}"
+echo -e "${BOLD}║        Piyote Controller Installer       ║${NC}"
 echo -e "${BOLD}╚══════════════════════════════════════════╝${NC}"
 echo ""
 
 # ── Architecture check ────────────────────────────────────────────────────────
 ARCH=$(uname -m)
 if [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
-  DEB_ARCH="arm64"
+  TAR_ARCH="arm64"
+  APP_DIR="piyote-controller-linux-arm64"
   info "Detected: ARM64 (Raspberry Pi 5 / Pi 4 64-bit)"
-elif [[ "$ARCH" == "armv7l" || "$ARCH" == "armhf" ]]; then
-  DEB_ARCH="armv7l"
-  warn "32-bit ARM detected. Using x64 build as fallback — consider upgrading to 64-bit Pi OS."
-  DEB_ARCH="x64"
 elif [[ "$ARCH" == "x86_64" ]]; then
-  DEB_ARCH="x64"
+  TAR_ARCH="x64"
+  APP_DIR="piyote-controller-linux-x64"
   info "Detected: x86_64"
 else
   error "Unsupported architecture: $ARCH"
 fi
 
-# ── Check for required tools, install if missing ──────────────────────────────
+# ── Check dependencies ────────────────────────────────────────────────────────
 info "Checking dependencies..."
-for cmd in curl wget dpkg; do
+for cmd in curl wget tar; do
   if ! command -v "$cmd" &>/dev/null; then
-    info "Installing $cmd..."
     sudo apt-get install -y "$cmd" -qq
   fi
 done
 
-# ── Fetch latest release from GitHub ─────────────────────────────────────────
+# ── Fetch latest release ──────────────────────────────────────────────────────
 info "Fetching latest release from GitHub..."
-
-RELEASE_JSON=$(curl -sf "https://api.github.com/repos/${REPO}/releases/latest" 2>/dev/null) \
-  || error "Could not reach GitHub. Check your internet connection and that the repo exists:\n  https://github.com/${REPO}"
+RELEASE_JSON=$(curl -sf "https://api.github.com/repos/${REPO}/releases/latest") \
+  || error "Could not reach GitHub. Check your internet connection."
 
 LATEST_URL=$(echo "$RELEASE_JSON" \
   | grep "browser_download_url" \
-  | grep "${DEB_ARCH}\.deb" \
+  | grep "${TAR_ARCH}\.tar\.gz" \
   | head -1 \
   | cut -d '"' -f 4)
 
 if [[ -z "$LATEST_URL" ]]; then
-  error "No ${DEB_ARCH}.deb found in the latest release.\nCheck releases at: https://github.com/${REPO}/releases"
+  error "No ${TAR_ARCH} release found at https://github.com/${REPO}/releases"
 fi
 
 LATEST_TAG=$(echo "$RELEASE_JSON" | grep '"tag_name"' | head -1 | cut -d '"' -f 4)
 info "Downloading ${APP_NAME} ${LATEST_TAG}..."
+wget -q --show-progress -O "$TMP_TAR" "$LATEST_URL" \
+  || error "Download failed."
 
-wget -q --show-progress -O "$TMP_DEB" "$LATEST_URL" \
-  || error "Download failed. Try again or download manually from:\n  https://github.com/${REPO}/releases"
+# ── Install ───────────────────────────────────────────────────────────────────
+info "Installing to ${INSTALL_DIR}..."
+sudo rm -rf "$INSTALL_DIR"
+sudo mkdir -p "$INSTALL_DIR"
+sudo tar -xzf "$TMP_TAR" -C "$INSTALL_DIR" --strip-components=1
+sudo chmod +x "${INSTALL_DIR}/piyote-controller"
 
-# ── Install the .deb ──────────────────────────────────────────────────────────
-info "Installing ${APP_NAME}..."
-sudo dpkg -i "$TMP_DEB" 2>/dev/null || true
-# Fix any unmet dependencies
-sudo apt-get install -f -y -qq
+# ── Symlink for terminal launch ───────────────────────────────────────────────
+sudo ln -sf "${INSTALL_DIR}/piyote-controller" /usr/local/bin/piyote-controller
+
+# ── Desktop entry (shows in Pi OS app menu) ───────────────────────────────────
+info "Creating desktop entry..."
+ICON_PATH="${INSTALL_DIR}/resources/app/assets/icon.png"
+sudo tee /usr/share/applications/piyote-controller.desktop > /dev/null <<EOF
+[Desktop Entry]
+Name=Piyote Controller
+Comment=DG-LAB Coyote E-Stim Device Controller
+Exec=${INSTALL_DIR}/piyote-controller
+Icon=${ICON_PATH}
+Type=Application
+Categories=Utility;
+Keywords=estim;coyote;audio;dac;
+StartupNotify=true
+EOF
 
 # ── USB & Serial permissions ──────────────────────────────────────────────────
 info "Configuring USB and serial port permissions..."
 sudo usermod -a -G dialout "$USER" 2>/dev/null || true
 sudo usermod -a -G plugdev "$USER" 2>/dev/null || true
 
-# ── udev rules for DG-LAB Coyote devices ─────────────────────────────────────
+# ── udev rules ────────────────────────────────────────────────────────────────
 info "Installing udev rules for Coyote USB devices..."
 sudo tee /etc/udev/rules.d/99-coyote-controller.rules > /dev/null <<'UDEV'
-# DG-LAB Coyote E-Stim Device — USB Serial (CH340/CH341 chip)
 SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", MODE="0666", GROUP="dialout", SYMLINK+="coyote%n"
-# CP2102 / CP210x (alternate chip variant)
 SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", MODE="0666", GROUP="dialout", SYMLINK+="coyote%n"
-# STM32 DFU (firmware update mode)
 SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", MODE="0666", GROUP="plugdev"
-# Generic USB Audio — ensure non-root access
 SUBSYSTEM=="sound", MODE="0666"
 UDEV
-
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 
-# ── USB Audio: ensure ALSA sees USB DACs ─────────────────────────────────────
-info "Checking audio subsystem..."
-if ! dpkg -l alsa-utils &>/dev/null 2>&1; then
-  sudo apt-get install -y alsa-utils -qq
-fi
+# ── Update desktop database ───────────────────────────────────────────────────
+update-desktop-database /usr/share/applications/ 2>/dev/null || true
 
 # ── Clean up ──────────────────────────────────────────────────────────────────
-rm -f "$TMP_DEB"
+rm -f "$TMP_TAR"
 
-# ── Done ──────────────────────────────────────────────────────────────────────
 echo ""
-success "${APP_NAME} ${LATEST_TAG} installed successfully!"
+success "${APP_NAME} ${LATEST_TAG} installed!"
 echo ""
-echo -e "  ${BOLD}Launch options:${NC}"
-echo -e "  • Application menu  →  ${CYAN}Accessories → Coyote Controller${NC}"
-echo -e "  • Terminal          →  ${CYAN}coyote-controller${NC}"
+echo -e "  ${BOLD}Launch:${NC}"
+echo -e "  • App menu  →  ${CYAN}Accessories → Piyote Controller${NC}"
+echo -e "  • Terminal  →  ${CYAN}piyote-controller${NC}"
 echo ""
-echo -e "  ${BOLD}USB tips:${NC}"
-echo -e "  • Plug in USB DACs before launching — each appears as a selectable audio output"
-echo -e "  • Coyote devices connect as serial ports (auto-detected)"
-echo ""
-warn "Log out and back in (or reboot) for USB/serial permissions to take full effect."
+warn "Log out and back in for USB/serial permissions to take effect."
 echo ""
