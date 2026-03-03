@@ -1494,6 +1494,12 @@ let strobePhase = 0;
 // 30fps cap for field computation on Pi — audio/scope still run at rAF rate
 let _fieldLastT = 0;
 const _FIELD_FRAME_MS = _IS_ELECTRON ? (1000 / 30) : 0; // 0 = uncapped (Mac)
+// 20fps cap for biome render on Pi (radial-gradient heavy — biggest audio-crunch culprit)
+let _biomeLastT = 0;
+const _BIOME_FRAME_MS = _IS_ELECTRON ? (1000 / 20) : 0;
+// 30fps cap for synth/splat render on Pi
+let _synthLastT = 0;
+const _SYNTH_FRAME_MS = _IS_ELECTRON ? (1000 / 30) : 0;
 const VIS_BRIGHT = 0.05/255; const VIS_CONTRAST = 1.75; const VIS_SAT = 1.65;
 
 const offField = document.createElement("canvas");
@@ -2354,10 +2360,17 @@ function compileExpr(expr) {
   function renderTick() {
     const now = performance.now(); const dt = clamp((now - lastRenderT) / 1000, 0, 0.05); lastRenderT = now;
     if (APP_MODE === "biome") {
-      if (window.BiomeEngine) { window.BiomeEngine.render(dt); drawSpectrum(); }
+      // On Pi/Electron: cap biome at 20fps — radial-gradient splats are the main audio-crunch culprit
+      if (window.BiomeEngine && now - _biomeLastT >= _BIOME_FRAME_MS) {
+        _biomeLastT = now;
+        window.BiomeEngine.render(dt); drawSpectrum();
+      }
     } else if (APP_MODE === "synth") {
-      // Full oscilloscope trace display on scope canvas
-      if (window.SynthEngine) window.SynthEngine.renderSlitScan(scopeCanvas);
+      // On Pi/Electron: cap synth slit-scan at 30fps to reduce main-thread pressure
+      if (now - _synthLastT >= _SYNTH_FRAME_MS) {
+        _synthLastT = now;
+        if (window.SynthEngine) window.SynthEngine.renderSlitScan(scopeCanvas);
+      }
       // Touch canvas is hidden in synth mode — skip wave field computation
     } else {
       drawScope();
