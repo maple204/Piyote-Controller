@@ -1381,9 +1381,12 @@ class World {
       this.t = 0; 
       this.enabled = false;
       this.audioOut = { amp: [0, 0, 0, 0], freq: [200, 200, 200, 200], phase: [0, 0, 0, 0] };
-      this.off = document.createElement("canvas"); 
+      this.off = document.createElement("canvas");
       this.offCtx = this.off.getContext("2d");
-      this.off.width = this.off.height = 400;
+      // On Pi/Electron: 256px off-canvas cuts fill-pixel work by ~60% vs 400px,
+      // reducing main-thread block time and audio crunch.
+      const _biomeIsElectron = !!(window.electronAPI?.isElectron || /Electron/.test(navigator.userAgent));
+      this.off.width = this.off.height = _biomeIsElectron ? 256 : 400;
       this.caretaker = { id: "gardener", enabled: true, influence: 1.0, t: 0 };
     }
 
