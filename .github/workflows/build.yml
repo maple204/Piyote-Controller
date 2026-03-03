@@ -21,9 +21,7 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm shrinkwrap
+        run: yarn install
 
       - name: Build ARM64 .deb
         run: npm run build:arm64
