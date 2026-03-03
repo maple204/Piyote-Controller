@@ -35,6 +35,6 @@ jobs:
           cat package.json
 
       - name: Build ARM64 .deb
-        run: npm run build:arm64
+        run: npx electron-builder --projectDir "$GITHUB_WORKSPACE" --linux deb --arm64
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
