@@ -34,15 +34,18 @@ jobs:
           cd dist
           tar -czf piyote-controller-linux-arm64.tar.gz piyote-controller-linux-arm64/
           tar -czf piyote-controller-linux-x64.tar.gz piyote-controller-linux-x64/
-          ls -lh *.tar.gz
+
+      - name: Save artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: piyote-controller-builds
+          path: dist/*.tar.gz
+          retention-days: 30
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: |
-            dist/piyote-controller-linux-arm64.tar.gz
-            dist/piyote-controller-linux-x64.tar.gz
-          generate_release_notes: true
+          files: dist/*.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
