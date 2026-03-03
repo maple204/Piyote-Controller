@@ -1,0 +1,1423 @@
+/* v6 layout + existing styling */
+:root{
+  --bg:#121212;
+  --panel:#1b1b1b;
+  --panel2:#161616;
+  --text:#eee;
+  --muted:#bdbdbd;
+
+  --ch1: rgba(0,170,255,0.95);
+  --ch2: rgba(255,80,80,0.95);
+  --ch3: rgba(80,255,140,0.95);
+  --ch4: rgba(255,210,80,0.95);
+
+  --shadow-dark:#000;
+  --shadow-light:#2b2b2b;
+  --radius:14px;
+}
+
+html,body{ margin:0; width:100%; height:100%; background:var(--bg); color:var(--text); font-family: Arial, sans-serif; }
+*{ box-sizing:border-box; }
+
+#app{
+  width:100%;
+  min-height:100vh;
+  display:grid;
+  grid-template-rows: 84px 1fr;
+  gap:10px;
+  padding:10px;
+}
+
+#header{
+  background:var(--panel);
+  border-radius:var(--radius);
+  padding:10px 12px;
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.title-block h1{ margin:0; font-size:32px; font-weight:800; }
+
+.header-buttons{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.mode-btn{
+  background:#222;
+  color:var(--text);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:999px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:14px;
+}
+.mode-btn:hover{ border-color: rgba(255,255,255,0.25); }
+
+.stop-btn{
+  background:#7a1212 !important;
+  border-color:#a22 !important;
+  color:#fff !important;
+}
+.stop-btn:hover{ filter: brightness(1.05); }
+
+.bt-status{
+  color: var(--muted);
+  font-size:12px;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+.panel{
+  background:var(--panel);
+  border-radius:var(--radius);
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  padding:14px;
+  min-width:0;
+}
+
+.panel.subtle{ background: var(--panel2); }
+
+#mainGrid{
+  display:grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  grid-template-rows: auto;
+  gap:12px;
+  min-height:0;
+}
+
+
+#controlsPanel{ grid-column:1; grid-row:1; min-height:0; display:flex; flex-direction:column; gap:12px; }
+
+
+.panelTitle{ color: rgba(255,255,255,0.6); font-size:12px; margin-bottom:8px; }
+
+.control-group{ margin: 12px 0; }
+label{ display:block; color: var(--muted); font-size:14px; margin-bottom:6px; }
+.click-reset{ cursor:pointer; }
+
+.basefreq-controls{ display:flex; gap:12px; align-items:center; }
+#baseFreq{ width:140px; }
+
+input[type="range"]{ width: 100%; accent-color: #ff79c6; }
+input[type="number"]{
+  background:#111;
+  border:1px solid rgba(255,255,255,0.15);
+  color:var(--text);
+  border-radius:10px;
+  padding:10px 12px;
+}
+
+#masterVolVal{ display:inline-block; margin-top:6px; color:var(--muted); }
+
+.row-split{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.small-note{ color: rgba(255,255,255,0.45); font-size:12px; }
+
+.channels{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:12px;
+}
+
+.channel{
+  background: linear-gradient(180deg, #171717, #141414);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 12px;
+  min-width:0;
+}
+
+.chHeaderRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin: 0 0 10px 0;
+}
+.chTitle{ font-size:18px; font-weight:800; }
+.chTitle.ch1{ color: var(--ch1); }
+.chTitle.ch2{ color: var(--ch2); }
+.chTitle.ch3{ color: var(--ch3); }
+.chTitle.ch4{ color: var(--ch4); }
+
+.devBadge{
+  font-size:12px;
+  font-weight:800;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.18);
+  background:#202020;
+  color: rgba(255,255,255,0.8);
+  white-space:nowrap;
+}
+.devBadge.connected{
+  border-color: rgba(120,255,170,0.45);
+  color: rgba(120,255,170,0.95);
+}
+
+.label-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.snap-pill{
+  background:#202020;
+  border:1px solid rgba(255,255,255,0.18);
+  color:var(--text);
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+  cursor:pointer;
+}
+.snap-pill.on{ border-color: rgba(255,255,255,0.35); }
+.max-pill{ border-color: rgba(255,255,255,0.25); }
+
+#oscilloscope{
+  width:100%;
+  height:100%;
+  flex:1;
+  background:#0d0d0d;
+  border-radius: 12px;
+}
+
+.square-wrap{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background:#0d0d0d;
+  border-radius: 12px;
+  overflow:hidden;
+}
+#fieldCanvas{ width:100%; height:100%; display:block; }
+
+.touch-controls{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.touch-row label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+.touch-row.two{
+  display:flex;
+  gap:10px;
+}
+.touch-row.two .half{ flex:1; }
+
+.motion-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin: 10px 0;
+  flex-wrap:wrap;
+}
+.motion-row label{ margin:0; min-width: 110px; display:flex; align-items:baseline; gap:8px; }
+.motion-row label span{ color: var(--muted); }
+.motion-row select{
+  background:#111;
+  border:1px solid rgba(255,255,255,0.15);
+  color:var(--text);
+  border-radius:10px;
+  padding:10px 12px;
+  min-width: 220px;
+}
+
+dialog{
+  border:none;
+  border-radius: 16px;
+  padding: 16px;
+  background: #1a1a1a;
+  color: var(--text);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.65);
+  width: min(420px, 92vw);
+}
+.dlg-title{ margin:0 0 8px 0; }
+.dlg-text{ color: rgba(255,255,255,0.7); margin-bottom: 10px; }
+.dlg-value{ margin-top: 8px; color: rgba(255,255,255,0.85); }
+.dlg-actions{ margin-top: 12px; display:flex; gap:10px; justify-content:flex-end; }
+
+/* ── Guide overlay + dialog box ─────────────────────────────────────────── */
+/* Full-screen backdrop */
+#guideOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.70);
+  z-index: 10000;
+  display: none;          /* shown via JS: style.display = 'flex' */
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+/* The actual dialog box */
+#guideDialog {
+  background: #1a1a1a;
+  color: var(--text);
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.80);
+  width: min(720px, 96vw);
+  max-height: 88vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.09);
+}
+.guide-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.09);
+  flex-shrink: 0;
+}
+.guide-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.88);
+}
+.guide-close-x {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.40);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.guide-close-x:hover { color: rgba(255,255,255,0.85); }
+
+/* Tab bar */
+.guide-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.09);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.guide-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.40);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 10px 14px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+}
+.guide-tab:hover { color: rgba(255,255,255,0.70); }
+.guide-tab.active {
+  color: #7af;
+  border-bottom-color: #7af;
+}
+
+/* Panel content */
+.guide-panel {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 12px;
+  color: rgba(255,255,255,0.72);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.guide-panel.active { display: block; }
+.guide-panel h4 {
+  margin: 14px 0 5px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255,255,255,0.50);
+}
+.guide-panel h4:first-child { margin-top: 0; }
+.guide-panel p  { margin: 4px 0 8px; }
+.guide-panel ol,
+.guide-panel ul { margin: 4px 0 10px; padding-left: 20px; }
+.guide-panel li { margin-bottom: 5px; }
+.guide-panel strong { color: rgba(255,255,255,0.88); }
+.guide-panel em    { color: rgba(255,255,255,0.55); font-style: italic; }
+.guide-intro {
+  color: rgba(255,255,255,0.50);
+  font-style: italic;
+  margin: 0 0 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+#guideDialog .dlg-actions {
+  padding: 10px 18px 14px;
+  border-top: 1px solid rgba(255,255,255,0.09);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+#debugOverlay{
+  position:fixed; left:12px; bottom:12px; z-index:9999;
+  background:rgba(0,0,0,0.55); color:#fff; padding:8px 10px;
+  border-radius:10px; font:12px/1.3 Arial; max-width:55vw;
+  pointer-events:none; white-space:pre-wrap;
+  display:none;
+}
+#debugOverlay.show{ display:block; }
+
+@media (max-width: 980px){
+  #mainGrid{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto 280px;
+  }
+  #controlsPanel{ grid-column:1; grid-row:1; }
+          .channels{ grid-template-columns: 1fr; }
+  .bt-status{ width:100%; white-space:normal; }
+}
+
+
+/* --- Vis touch pad overlay --- */
+.vis-pad{
+  position:relative;
+  overflow:hidden;
+  touch-action:none;
+  user-select:none;
+}
+.vis-pad canvas{ width:100%; height:100%; display:block; }
+
+.vis-crosshair{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px) 50% 0/1px 100%,
+    linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px) 0 50%/100% 1px;
+}
+
+.vis-cursor{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.85);
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.45);
+  pointer-events:none;
+  transform: translate(-50%, -50%);
+  left:50%;
+  top:50%;
+}
+
+.touch-row.toggles{
+  margin-top:2px;
+}
+/* Toggle labels should sit immediately beside checkbox (not spaced to far edge) */
+.touch-row.toggles label{ justify-content:flex-start !important; }
+.toggle{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--muted);
+  font-size:13px;
+}
+.toggle input{ transform: translateY(1px); }
+
+
+/* Touch negative sliders: drag left to increase */
+.neg-slider{ direction: rtl; }
+
+/* Scope inside left column */
+#scopePanel{ display:flex; flex-direction:column; height:260px; }
+
+/* Dual-stick cursors (HTML uses .vis-cursor-freq/.vis-cursor-amp) */
+.vis-cursor{ position:absolute; transform:translate(-50%,-50%); left:50%; top:50%; pointer-events:none; }
+.vis-cursor-freq{ width:18px; height:18px; border-radius:50%; border:2px solid rgba(255,255,255,0.85); background: rgba(0,0,0,0.10); box-shadow:0 0 0 2px rgba(0,0,0,0.45); z-index:5; }
+.vis-cursor-amp{ width:14px; height:14px; border-radius:50%; border:2px solid rgba(255,121,198,0.95); background: rgba(0,0,0,0.10); box-shadow:0 0 0 2px rgba(0,0,0,0.45); z-index:6; }
+
+#app{min-height:100vh;}
+
+
+/* --- UI Tweaks Round 3 --- */
+#header{ padding:8px 10px; }
+.header-buttons{ gap:10px; }
+
+/* --- 1. Consolidated Header & Floating Stop Button --- */
+#header { 
+  padding: 8px 10px; 
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  /* This padding prevents other buttons from sliding under the floating STOP button */
+  padding-right: 110px; 
+}
+
+/* Floating STOP Button - Matched to Header Style */
+#stopBtn {
+  position: fixed;
+  top: 25px;         
+  right: 25px;        
+  z-index: 100000;
+  
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  
+  background: #7a1212 !important;
+  border: 1px solid #ff4444 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.1s ease;
+}
+
+#stopBtn:hover { filter: brightness(1.2); }
+#stopBtn:active { transform: scale(0.95); }
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding-right: 110px; /* Space for the floating button */
+}
+
+@media (max-width: 980px) {
+    #stopBtn { top: 15px; right: 15px; }
+    .header-buttons { padding-right: 0; }
+}
+
+/* --- 2. Cleaned up Channel Layout --- */
+.channels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.channel {
+  background: linear-gradient(180deg, #171717, #141414);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  padding: 12px 12px 14px 12px; /* Bottom padding for range sliders */
+  min-width: 0;
+}
+
+/* Hide Phase/Cycle controls as requested */
+.channel .control-group:nth-child(n+4) {
+  display: none !important;
+}
+
+/* Tighten spacing for the 3 remaining controls */
+.channel .control-group:nth-child(3) {
+  margin-bottom: 0 !important;
+}
+
+/* --- 3. Biome Mode Specifics --- */
+body[data-mode="biome"] { background: #101012; }
+
+/* Hide standard panels in Biome mode */
+body[data-mode="biome"] #touchPanel,
+body[data-mode="biome"] #motionPanel {
+  display: none !important;
+}
+
+/* Hide Biome specific items when NOT in biome mode */
+body:not([data-mode="biome"]) #biomePanel { 
+  display: none !important; 
+}
+
+/* Hide the manual feed list and start/stop as requested for Caretaker mode */
+body[data-mode="biome"] #biomePanel .biome-feed-list,
+body[data-mode="biome"] #caretakerBtn,
+#biomePanel .biome-section-title,
+#biomePanel .biome-hint { 
+  display: none !important; 
+}
+
+@media (max-width: 980px) {
+    #stopBtn {
+        top: 15px;
+        right: 15px;
+    }
+}
+
+/* Adjust header spacing so other buttons don't feel crowded */
+.header-buttons {
+  padding-right: 110px; 
+}
+
+#rightPanel{ grid-column:2; grid-row:1; min-height:0; display:flex; flex-direction:column; gap:12px; }
+
+.subpanel{
+  background: var(--panel2);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 18px;
+  padding:14px;
+  box-shadow:none;
+  min-width:0;
+}
+
+/* Global Master/Base card */
+#globalPanel{ padding:14px; }
+#globalPanel .control-group{ margin: 10px 0; }
+#globalPanel .control-group:first-child{ margin-top: 6px; }
+#globalPanel .control-group:last-child{ margin-bottom: 6px; }
+.visually-hidden-input{ display:none !important; }
+
+/* Scope: no inner padding between stroke and black canvas */
+#scopePanel.scopeFrame{
+  height:260px;
+  padding:0;
+  overflow:hidden;
+  border-radius:18px;
+}
+#scopePanel.scopeFrame #oscilloscope{
+  width:100%;
+  height:100%;
+  border-radius:18px;
+  display:block;
+  background:#0d0d0d;
+}
+
+/* Vis: grey stroke around the pad, no extra titles */
+#vizPanel.visFrame{ padding:0; overflow:hidden; }
+#vizPanel.visFrame .square-wrap{
+  border:1px solid rgba(255,255,255,0.10);
+  border-radius:18px;
+}
+#vizPanel.visFrame #fieldCanvas{ border-radius:18px; }
+
+/* Remove any panel titles inside right column if present */
+#rightPanel .panelTitle{ display:none; }
+
+/* Touch invert labels sit beside checkbox */
+.check-row label{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+}
+.check-row span{ opacity:0.9; }
+
+/* Motion (Scripts) top layout */
+.motion-top{ display:flex; flex-direction:column; gap:8px; }
+.motion-label{ color: var(--muted); font-size:14px; font-weight:400; margin-bottom:6px; }
+.motion-controls{ display:flex; gap:12px; align-items:center; }
+.motion-controls select{ flex:1; min-width:0; background:#111; border:1px solid rgba(255,255,255,0.15); color:var(--text); border-radius:10px; padding:10px 12px; }
+
+.start-btn{ border-color: rgba(120,255,160,0.45); background: rgba(70,160,100,0.25); }
+.stop-btn2{ border-color: rgba(255,120,120,0.45); background: rgba(160,70,70,0.25); }
+
+/* Script running indicator: animated ring */
+.start-btn{ position:relative; }
+.start-btn.running::after{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  border-radius:999px;
+  padding:2px;
+  background: conic-gradient(from 0deg, rgba(120,255,160,0.0), rgba(120,255,160,0.85), rgba(120,255,160,0.0));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spinRing 1.3s linear infinite;
+  pointer-events:none;
+}
+@keyframes spinRing{ to{ transform: rotate(360deg); } }
+
+/* Tighten header/panel padding consistency */
+.panel{ padding:14px; }
+
+#baseFreqLabel, #masterVolLabel{ display:flex; align-items:baseline; gap:8px; }
+
+
+/* --- Biome mode gating --- */
+body[data-mode="biome"] #touchPanel,
+body[data-mode="biome"] #motionPanel {
+  display:none !important;
+}
+body:not([data-mode="biome"]) #biomePanel { display:none !important; }
+
+/* Feed UI */
+#biomePanel .biome-controls{ display:flex; flex-direction:column; gap:10px; }
+#biomePanel .biome-section-title{ font-weight:600; color:var(--text); opacity:0.9; margin-top:4px; }
+#biomePanel .biome-feed-list{ display:grid; grid-template-columns:1fr; gap:8px; }
+.biome-feed-btn{
+  display:flex; align-items:center; gap:10px;
+  background: linear-gradient(180deg,#242424,#1a1a1a);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px;
+  padding:10px 12px;
+  color:var(--text);
+  cursor:pointer;
+}
+.biome-feed-btn:hover{ border-color: rgba(255,255,255,0.22); }
+.dot{ width:12px; height:12px; border-radius:50%; display:inline-block; }
+.dot-sugar{ background: rgba(255,200,80,0.95); }
+.dot-salt{ background: rgba(120,190,255,0.95); }
+.dot-iron{ background: rgba(255,100,90,0.95); }
+.dot-water{ background: rgba(110,255,220,0.95); }
+.dot-sulfur{ background: rgba(170,120,255,0.95); }
+.dot-carbon{ background: rgba(240,240,240,0.85); }
+.biome-caretaker-row{ display:flex; gap:10px; align-items:center; }
+.biome-select{
+  flex:1;
+  background:#1b1b1b;
+  border:1px solid rgba(255,255,255,0.14);
+  color:var(--text);
+  border-radius:12px;
+  padding:10px 12px;
+}
+.biome-hud{ display:flex; justify-content:flex-end; }
+.biome-hint{
+  font-size:12px;
+  color:rgba(255,255,255,0.65);
+  background: rgba(0,0,0,0.25);
+  border:1px solid rgba(255,255,255,0.10);
+  padding:6px 10px;
+  border-radius:999px;
+}
+
+
+/* --- Biome: caretakers only (no manual feed) --- */
+body[data-mode="biome"] #biomePanel .biome-feed-list { display:none !important; }
+
+/* Random caretaker button — glows when active */
+#randomCaretakerBtn { font-size: 0.82em; padding: 5px 10px; }
+#randomCaretakerBtn.active {
+  background: rgba(255, 200, 60, 0.18) !important;
+  border-color: rgba(255, 200, 60, 0.60) !important;
+  color: rgba(255, 220, 130, 1.0) !important;
+  animation: randomPulse 2s ease-in-out infinite;
+}
+@keyframes randomPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,200,60,0); }
+  50%       { box-shadow: 0 0 8px 2px rgba(255,200,60,0.35); }
+}
+body[data-mode="biome"] { background: #101012; }
+
+/* --- Phase UI disabled (v1) --- */
+/* Phase controls are hidden by default (Coyote BT pulses sequentially, phase has no effect).
+   They become visible in control mode when at least one DAC slot is connected,
+   because continuous-wave audio output DOES respond to phase. */
+[phaseControl],
+[phaseCycleControl],
+.touchPhaseControl {
+  display: none !important;
+}
+
+/* Un-hide phase controls when a DAC slot is active (control mode only) */
+body.dac-slot-active [phaseControl],
+body.dac-slot-active [phaseCycleControl] {
+  display: block !important;
+}
+
+/* --- Routing UI for missing devices --- */
+.devBadge.routeable{ cursor:pointer; user-select:none; }
+.devBadge.routeable:hover{ border-color: rgba(255,255,255,0.30); }
+.devBadge.routeon{
+  border-color: rgba(120,255,170,0.45);
+  color: rgba(120,255,170,0.95);
+}
+
+.channel-routed .routed-note{
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* --- Routed channel: grey everything except Unroute button --- */
+.channel-routed{
+  opacity: 0.38;
+}
+.channel-routed .route-unmap{
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  filter: none !important;
+}
+.route-unmap{
+  margin-left: 10px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(0,0,0,0.25);
+  color: rgba(255,255,255,0.9);
+  cursor: pointer;
+}
+.route-unmap:hover{
+  border-color: rgba(255,255,255,0.35);
+}
+
+/* ============================================================
+   FINAL UI CLEANUP
+   - Hides Phase UI (items 4 & 5)
+   - Restores Amplitude/Multiplier (items 1-3) for all channels
+   - Tightens spacing and removes redundant labels
+   ============================================================ */
+
+/* 1. Hide only the Phase and Phase Cycle groups in the boxes */
+.channel .control-group:nth-child(n+4) {
+  display: none !important;
+}
+
+/* 2. Tighten space under Frequency Multiplier (the last visible item) */
+.channel .control-group:nth-child(3) {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* 3. Normalize panel padding and range margins */
+.channel {
+  padding-bottom: 14px !important;
+}
+.channel input[type="range"] {
+  margin: 0;
+}
+
+/* 4. Hide Biome Feed header & hint text */
+#biomePanel .biome-section-title,
+#biomePanel .biome-hint {
+  display: none !important;
+}
+
+/* 5. Caretaker & Script Intensity Label alignment */
+#caretakerIntensityVal { display: none !important; }
+#caretakerIntensityValInline { margin-left: 10px; opacity: 0.85; }
+
+/* 6. Static Stop Button Style (No Spinning Ring) */
+#scriptToggleBtn.running {
+  animation: none !important;
+  background: rgba(220,60,60,0.22) !important;
+  border-color: rgba(220,60,60,0.55) !important;
+  color: rgba(255,220,220,0.95) !important;
+}
+#scriptToggleBtn.running::after { display: none !important; }
+
+/* ============================================================
+   CONNECT PICKER DIALOG
+   ============================================================ */
+
+#connectDialog {
+  background: var(--panel);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 22px 20px 18px;
+  min-width: 340px;
+  max-width: 480px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+}
+#connectDialog::backdrop { background: rgba(0,0,0,0.65); }
+
+.connect-hint { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+
+.connect-device-list { display: flex; flex-direction: column; gap: 8px; }
+
+.connect-device-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.connect-device-btn:hover { background: #272727; border-color: rgba(255,255,255,0.28); }
+
+/* BT option: blue tint on hover */
+.connect-device-btn:first-child:hover { border-color: rgba(0,170,255,0.45); }
+.connect-device-btn:first-child:hover .connect-dev-icon { color: rgba(0,170,255,0.9); }
+
+/* DAC options: green tint on hover */
+.connect-device-btn:not(:first-child):hover { border-color: rgba(0,220,120,0.4); }
+.connect-device-btn:not(:first-child):hover .connect-dev-icon { color: rgba(0,220,120,0.9); }
+
+.connect-dev-icon {
+  font-size: 20px;
+  line-height: 1;
+  min-width: 26px;
+  text-align: center;
+  color: rgba(255,255,255,0.45);
+}
+.connect-dev-info { display: flex; flex-direction: column; gap: 3px; }
+.connect-dev-name { font-size: 14px; font-weight: 700; }
+.connect-dev-sub { font-size: 11px; color: var(--muted); }
+
+.connect-no-devices { font-size: 12px; color: var(--muted); text-align: center; padding: 12px 0; margin: 0; }
+
+/* DAC-connected badge */
+.devBadge.dac-badge {
+  background: rgba(0,200,100,0.15) !important;
+  border-color: rgba(0,220,120,0.45) !important;
+  color: rgba(160,255,200,0.95) !important;
+}
+
+/* ============================================================
+   DAC AUDIO OUTPUT PANEL
+   ============================================================ */
+
+#dacPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* When DAC is off, mute the panel slightly */
+#dacPanel.dac-panel-off {
+  opacity: 0.75;
+}
+
+.dac-device-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dac-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dac-label {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.dac-select {
+  flex: 1;
+  min-width: 0;
+  background: #222;
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 5px 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.dac-select:focus { outline: none; border-color: rgba(255,255,255,0.3); }
+
+.dac-routing {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.dac-route-head {
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr  3fr 2fr 2fr;
+  gap: 4px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  padding: 0 2px;
+  text-align: center;
+}
+
+.dac-route-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr 2fr  3fr 2fr 2fr;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+}
+
+.dac-ch-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.dac-chk {
+  width: 16px;
+  height: 16px;
+  accent-color: rgba(0,170,255,0.9);
+  cursor: pointer;
+  justify-self: center;
+}
+
+.dac-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.30);
+  text-align: center;
+  margin-top: 2px;
+}
+
+.dac-eq-row {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.dac-eq-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.dac-eq-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+}
+
+/* Per-slot DAC settings sub-sections */
+.dac-slot-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dac-slot-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 4px;
+}
+
+/* Remove top border on first visible slot */
+.dac-slot-settings:first-of-type .dac-slot-title {
+  border-top: none;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+/* ══════════════════════════════════════════════════════════
+   SYNTH MODE
+   ══════════════════════════════════════════════════════════ */
+
+/* Body tint in Synth mode */
+body[data-mode="synth"] { background: #0e0e16; }
+
+/* Show synth panel only in synth mode */
+body:not([data-mode="synth"]) #synthPanel { display: none !important; }
+
+/* Hide biome-only and control-only panels in synth mode */
+body[data-mode="synth"] #biomePanel,
+body[data-mode="synth"] #touchPanel,
+body[data-mode="synth"] #vizPanel,
+body[data-mode="synth"] #motionPanel { display: none !important; }
+
+/* Scope panel label changes in synth mode (still visible, shows slit-scan) */
+body[data-mode="synth"] .scopeFrame { border: 1px solid rgba(100,80,255,0.2); }
+
+/* Synth panel: full-height scrollable container in right panel column */
+#synthPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#synthContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────── */
+.synth-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+.synth-tool-btn {
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+}
+
+/* ── Channel lanes ───────────────────────────────────────── */
+.synth-lanes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 2px 0;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.synth-lane {
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.07);
+  padding: 8px 10px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Lane header */
+.synth-lane-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.synth-lane-ch {
+  font-weight: 800;
+  font-size: 13px;
+  min-width: 32px;
+}
+.synth-add-btn,
+.synth-fx-btn {
+  font-size: 11px !important;
+  padding: 4px 9px !important;
+}
+.synth-fx-btn.active {
+  background: rgba(100,80,255,0.3) !important;
+  border-color: rgba(100,80,255,0.7) !important;
+  color: #c4b0ff !important;
+}
+
+/* ── Modifier blocks row ─────────────────────────────────── */
+.synth-lane-mods {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 2px;
+  min-height: 46px;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px dashed rgba(255,255,255,0.08);
+  transition: border-color 0.15s;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.15) transparent;
+}
+.synth-lane-mods.drag-over {
+  border-color: rgba(100,80,255,0.55);
+  background: rgba(100,80,255,0.07);
+}
+
+.synth-drop-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  white-space: nowrap;
+  pointer-events: none;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+
+/* Individual modifier block */
+.synth-mod-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid var(--mod-color, #888);
+  border-radius: 8px;
+  padding: 5px 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  user-select: none;
+  transition: background 0.12s, transform 0.1s;
+  position: relative;
+}
+.synth-mod-block:hover { background: rgba(255,255,255,0.10); transform: translateY(-1px); }
+.synth-mod-block.dragging { opacity: 0.45; transform: scale(0.97); }
+
+/* Enabled dot */
+.synth-mod-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.synth-mod-dot.active { background: var(--mod-color, #08f); box-shadow: 0 0 5px var(--mod-color, #08f); }
+
+.synth-mod-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mod-color, #ccc);
+  white-space: nowrap;
+}
+
+.synth-mod-remove {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.35);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.synth-mod-remove:hover { color: rgba(255,100,100,0.9); }
+
+/* ── Effects rack ────────────────────────────────────────── */
+.synth-fx-rack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 4px 2px 2px;
+}
+
+.synth-fx-chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--fx-color, #888);
+  border-radius: 7px;
+  padding: 4px 7px;
+  cursor: pointer;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  transition: background 0.12s;
+}
+.synth-fx-chip:hover { background: rgba(255,255,255,0.09); }
+.synth-fx-chip.active {
+  background: rgba(255,255,255,0.10);
+  color: var(--fx-color, #ccc);
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+}
+.synth-fx-toggle {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 5px;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  font-size: 10px;
+  padding: 2px 5px;
+}
+.synth-fx-chip.active .synth-fx-toggle {
+  background: var(--fx-color, #08f);
+  border-color: transparent;
+  color: #000;
+  font-weight: 700;
+}
+
+/* ── Modifier palette (floating) ─────────────────────────── */
+.synth-palette {
+  position: fixed;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background: #1a1a26;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 10px;
+  z-index: 9000;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+  max-width: 300px;
+}
+.synth-palette-chip {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid currentColor;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  transition: background 0.12s, transform 0.1s;
+}
+.synth-palette-chip:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); }
+
+/* ── Parameter popup (floating) ──────────────────────────── */
+.synth-param-popup {
+  position: fixed;
+  background: #1c1c2a;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 12px;
+  padding: 12px 14px;
+  z-index: 9100;
+  box-shadow: 0 10px 35px rgba(0,0,0,0.75);
+  min-width: 220px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.synth-param-title {
+  font-weight: 800;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 2px;
+}
+.synth-param-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.synth-param-row label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+}
+.synth-param-val {
+  font-weight: 700;
+  color: #0af;
+}
+.synth-param-slider {
+  width: 100%;
+  accent-color: #7060ff;
+}
+.synth-param-close {
+  align-self: flex-end;
+  font-size: 12px !important;
+  padding: 5px 12px !important;
+  margin-top: 2px;
+}
+
+/* ── Arrangements dialog (floating) ─────────────────────── */
+.synth-arr-dlg {
+  position: fixed;
+  background: #1a1a28;
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 14px;
+  padding: 0;
+  z-index: 9200;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.8);
+  min-width: 300px;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.synth-arr-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  letter-spacing: 0.03em;
+}
+.synth-arr-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.synth-arr-close:hover { color: rgba(255,255,255,0.85); }
+.synth-arr-list {
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+.synth-arr-empty {
+  padding: 18px 16px;
+  color: rgba(255,255,255,0.35);
+  font-size: 12px;
+  text-align: center;
+}
+.synth-arr-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin: 1px 6px;
+  transition: background 0.12s;
+}
+.synth-arr-row:hover { background: rgba(255,255,255,0.06); }
+.synth-arr-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.80);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.synth-arr-act-btn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  color: rgba(255,255,255,0.75);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+}
+.synth-arr-act-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+.synth-arr-load  { border-color: rgba(80,200,255,0.35); color: #5cf; }
+.synth-arr-load:hover  { background: rgba(80,200,255,0.14); }
+.synth-arr-del   { border-color: rgba(255,80,80,0.30); color: rgba(255,130,130,0.85); }
+.synth-arr-del:hover   { background: rgba(255,80,80,0.14); }
+.synth-arr-save  { border-color: rgba(100,255,160,0.35); color: #6fc; }
+.synth-arr-save:hover  { background: rgba(100,255,160,0.14); }
+.synth-arr-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.02);
+}
+.synth-arr-input {
+  flex: 1;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 7px;
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  padding: 6px 10px;
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 0;
+}
+.synth-arr-input::placeholder { color: rgba(255,255,255,0.30); }
+.synth-arr-input:focus { border-color: rgba(120,100,255,0.6); }
