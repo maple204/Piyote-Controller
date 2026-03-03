@@ -6,9 +6,9 @@
 set -e
 
 # ── Config ────────────────────────────────────────────────────────────────────
-REPO="YOUR_USERNAME/coyote-controller"   # ← Update this before publishing
-APP_NAME="Coyote Controller"
-TMP_DEB="/tmp/coyote-controller.deb"
+REPO="maple204/Piyote-Controller"   
+APP_NAME="Piyote Controller"
+TMP_DEB="/tmp/piyote-controller.deb"
 
 # ── Colours ───────────────────────────────────────────────────────────────────
 RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'

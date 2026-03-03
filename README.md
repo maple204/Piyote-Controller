@@ -1,4 +1,4 @@
-# Coyote Controller
+# Piyote Controller
 
 Multi-channel E-Stim controller for DG-LAB Coyote devices. Supports stereo USB DAC audio output across two devices (4 independent channels), Control / Biome / Synth modes, and direct USB serial connection to Coyote hardware.
 
@@ -7,7 +7,7 @@ Multi-channel E-Stim controller for DG-LAB Coyote devices. Supports stereo USB D
 ## Install on Raspberry Pi (one-liner)
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/YOUR_USERNAME/coyote-controller/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/maple204/Piyote-Controller/main/install.sh | bash
 ```
 
 After install, find it in **Application Menu → Accessories → Coyote Controller**, or run `coyote-controller` in a terminal.
