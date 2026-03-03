@@ -1455,32 +1455,26 @@ function cycleRouteValue(v, options){
   // End splat system ────────────────────────────────────────────────────────
 
   // -------- Field rendering (v6 source) --------
-// On Pi / Electron: render the field at lower internal resolution and upscale
-// smoothly — cuts CPU work by ~75% with minimal visual difference at 1080p.
-const _IS_ELECTRON = !!(window.electronAPI?.isElectron || /Electron/.test(navigator.userAgent));
 let GRID_N = 101;
 let FIELD_OFF_W = 220;
 let FIELD_OFF_H = 220;
-let FIELD_QUALITY = _IS_ELECTRON ? 0.32 : 0.65;
-let fieldImg = null;
-let fieldImgData = null;
+let FIELD_QUALITY = 0.65; 
+let fieldImg = null; 
+let fieldImgData = null; 
 let fieldFrameMsEMA = 16;
 let fieldZ = new Float32Array(GRID_N * GRID_N);
 let fieldU = new Float32Array(GRID_N * GRID_N);
 
 function ensureFieldBuffers(viewW, viewH) {
   const dpr = window.devicePixelRatio || 1;
-  // On Pi/Electron use a lower clamp floor — the upscale smoothing compensates visually
-  const gridMin = _IS_ELECTRON ? 72 : 180;
-  const dimMin  = _IS_ELECTRON ? 96 : 240;
-  const targetGrid = clamp(Math.round(Math.min(viewW, viewH) * dpr * FIELD_QUALITY), gridMin, 420);
+  const targetGrid = clamp(Math.round(Math.min(viewW, viewH) * dpr * FIELD_QUALITY), 180, 420);
   if (targetGrid !== GRID_N) {
     GRID_N = targetGrid;
     fieldZ = new Float32Array(GRID_N * GRID_N);
     fieldU = new Float32Array(GRID_N * GRID_N);
   }
-  const targetW = clamp(Math.round(viewW * dpr * FIELD_QUALITY), dimMin, 900);
-  const targetH = clamp(Math.round(viewH * dpr * FIELD_QUALITY), dimMin, 900);
+  const targetW = clamp(Math.round(viewW * dpr * FIELD_QUALITY), 240, 900);
+  const targetH = clamp(Math.round(viewH * dpr * FIELD_QUALITY), 240, 900);
   if (targetW !== FIELD_OFF_W || targetH !== FIELD_OFF_H) {
     FIELD_OFF_W = targetW; FIELD_OFF_H = targetH;
     offField.width = FIELD_OFF_W; offField.height = FIELD_OFF_H;
@@ -1489,17 +1483,8 @@ function ensureFieldBuffers(viewW, viewH) {
   }
 }
 let uMaxSmooth = 1e-6;
-const FIELD_DRIFT_HZ = 0.0625;
+const FIELD_DRIFT_HZ = 0.0625; 
 let strobePhase = 0;
-// 30fps cap for field computation on Pi — audio/scope still run at rAF rate
-let _fieldLastT = 0;
-const _FIELD_FRAME_MS = _IS_ELECTRON ? (1000 / 30) : 0; // 0 = uncapped (Mac)
-// 20fps cap for biome render on Pi (radial-gradient heavy — biggest audio-crunch culprit)
-let _biomeLastT = 0;
-const _BIOME_FRAME_MS = _IS_ELECTRON ? (1000 / 20) : 0;
-// 30fps cap for synth/splat render on Pi
-let _synthLastT = 0;
-const _SYNTH_FRAME_MS = _IS_ELECTRON ? (1000 / 30) : 0;
 const VIS_BRIGHT = 0.05/255; const VIS_CONTRAST = 1.75; const VIS_SAT = 1.65;
 
 const offField = document.createElement("canvas");
@@ -1586,10 +1571,7 @@ function renderFieldRich(dt) {
       fieldImgData[p] = clamp(Math.floor(r * 255), 0, 255); fieldImgData[p + 1] = clamp(Math.floor(g * 255), 0, 255); fieldImgData[p + 2] = clamp(Math.floor(b * 255), 0, 255); fieldImgData[p + 3] = 255;
     }
   }
-  offFieldCtx.putImageData(img, 0, 0);
-  fieldCtx.imageSmoothingEnabled = true;
-  fieldCtx.imageSmoothingQuality = 'high';  // bilinear/bicubic upscale — keeps edges smooth at low source res
-  fieldCtx.drawImage(offField, 0, 0, FIELD_OFF_W, FIELD_OFF_H, 0, 0, w, h);
+  offFieldCtx.putImageData(img, 0, 0); fieldCtx.imageSmoothingEnabled = true; fieldCtx.drawImage(offField, 0, 0, FIELD_OFF_W, FIELD_OFF_H, 0, 0, w, h);
 }
 
   // -------- Audio monitor (AudioWorklet) --------
@@ -2360,27 +2342,16 @@ function compileExpr(expr) {
   function renderTick() {
     const now = performance.now(); const dt = clamp((now - lastRenderT) / 1000, 0, 0.05); lastRenderT = now;
     if (APP_MODE === "biome") {
-      // On Pi/Electron: cap biome at 20fps — radial-gradient splats are the main audio-crunch culprit
-      if (window.BiomeEngine && now - _biomeLastT >= _BIOME_FRAME_MS) {
-        _biomeLastT = now;
-        window.BiomeEngine.render(dt); drawSpectrum();
-      }
+      if (window.BiomeEngine) { window.BiomeEngine.render(dt); drawSpectrum(); }
     } else if (APP_MODE === "synth") {
-      // On Pi/Electron: cap synth slit-scan at 30fps to reduce main-thread pressure
-      if (now - _synthLastT >= _SYNTH_FRAME_MS) {
-        _synthLastT = now;
-        if (window.SynthEngine) window.SynthEngine.renderSlitScan(scopeCanvas);
-      }
+      // Full oscilloscope trace display on scope canvas
+      if (window.SynthEngine) window.SynthEngine.renderSlitScan(scopeCanvas);
       // Touch canvas is hidden in synth mode — skip wave field computation
     } else {
       drawScope();
       strobePhase = (strobePhase + TAU * FIELD_DRIFT_HZ * dt) % TAU;
-      // On Pi/Electron: cap field at 30fps to save CPU — scope/audio run at full rAF rate
-      if (now - _fieldLastT >= _FIELD_FRAME_MS) {
-        _fieldLastT = now;
-        computeField(true, dt);
-        renderFieldRich(dt);
-      }
+      computeField(true, dt);
+      renderFieldRich(dt);
     }
     requestAnimationFrame(renderTick);
   }
