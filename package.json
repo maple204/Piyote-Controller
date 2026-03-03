@@ -3,50 +3,13 @@
   "version": "1.0.0",
   "description": "DG-LAB Coyote E-Stim Controller — multi-channel audio DAC output with USB device support",
   "main": "electron-main.js",
-"scripts": {
-  "start": "electron .",
-  "build:arm64": "electron-packager . piyote-controller --platform=linux --arch=arm64 --out=dist --overwrite --icon=assets/icon.png",
-  "build:x64": "electron-packager . piyote-controller --platform=linux --arch=x64 --out=dist --overwrite --icon=assets/icon.png"
-},
-  "build": {
-    "appId": "com.piyotecontroller.app",
-    "productName": "Piyote Controller",
-    "copyright": "Copyright © 2025",
-    "directories": {
-      "output": "dist",
-      "buildResources": "assets"
-    },
-    "files": [
-      "electron-main.js",
-      "preload.js",
-      "web/**/*",
-      "assets/**/*"
-    ],
-    "linux": {
-      "target": [
-        {
-          "target": "deb",
-          "arch": ["arm64"]
-        }
-      ],
-      "category": "Utility",
-      "icon": "assets/icon.png",
-      "desktop": {
-        "Name": "Piyote Controller",
-        "Comment": "DG-LAB Coyote E-Stim Device Controller",
-        "Categories": "Utility;",
-        "Keywords": "estim;coyote;audio;dac;"
-      }
-    },
-    "deb": {
-      "priority": "optional",
-      "compression": "xz",
-      "afterInstall": "scripts/postinstall.sh",
-      "depends": ["libgtk-3-0", "libnotify4", "libnss3", "libxss1", "libxtst6", "xdg-utils", "libatspi2.0-0", "libuuid1", "libasound2"]
-    }
+  "scripts": {
+    "start": "electron .",
+    "build:arm64": "electron-packager . piyote-controller --platform=linux --arch=arm64 --out=dist --overwrite --icon=assets/icon.png --asar",
+    "build:x64": "electron-packager . piyote-controller --platform=linux --arch=x64 --out=dist --overwrite --icon=assets/icon.png --asar"
   },
   "devDependencies": {
     "electron": "^32.0.0",
-    "@electron/packager": "^18.3.0"
+    "electron-packager": "^17.1.2"
   }
 }
