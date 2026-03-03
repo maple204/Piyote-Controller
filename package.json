@@ -5,8 +5,8 @@
   "main": "electron-main.js",
   "scripts": {
     "start": "electron .",
-    "build:arm64": "electron-packager . piyote-controller --platform=linux --arch=arm64 --out=dist --overwrite --icon=assets/icon.png --asar",
-    "build:x64": "electron-packager . piyote-controller --platform=linux --arch=x64 --out=dist --overwrite --icon=assets/icon.png --asar"
+    "build:arm64": "electron-packager . piyote-controller --platform=linux --arch=arm64 --out=dist --overwrite --icon=assets/icon.png",
+    "build:x64": "electron-packager . piyote-controller --platform=linux --arch=x64 --out=dist --overwrite --icon=assets/icon.png"
   },
   "devDependencies": {
     "electron": "^32.0.0",
