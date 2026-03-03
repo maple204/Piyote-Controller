@@ -1,5 +1,5 @@
 {
-  "name": "coyote-controller",
+  "name": "piyote-controller",
   "version": "1.0.0",
   "description": "DG-LAB Coyote E-Stim Controller — multi-channel audio DAC output with USB device support",
   "main": "electron-main.js",
@@ -10,8 +10,8 @@
     "build:x64": "electron-builder --linux deb --x64"
   },
   "build": {
-    "appId": "com.coyotecontroller.app",
-    "productName": "Coyote Controller",
+    "appId": "com.piyotecontroller.app",
+    "productName": "Piyote Controller",
     "copyright": "Copyright © 2025",
     "directories": {
       "output": "dist",
@@ -33,7 +33,7 @@
       "category": "Utility",
       "icon": "assets/icon.png",
       "desktop": {
-        "Name": "Coyote Controller",
+        "Name": "Piyote Controller",
         "Comment": "DG-LAB Coyote E-Stim Device Controller",
         "Categories": "Utility;",
         "Keywords": "estim;coyote;audio;dac;"
